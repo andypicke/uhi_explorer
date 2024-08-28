@@ -6,7 +6,8 @@ plot_choropleth <- function(dat_joined){
   pal <- colorNumeric("YlOrRd", domain = dat_joined$uhi_effect_degF)
   
   leaflet() |>
-    addTiles() |>
+    addProviderTiles(providers$CartoDB.Positron, group = "CartoDB.Positron") |> 
+    addProviderTiles(providers$Esri.WorldImagery, group = "Esri.WorldImagery") |> 
     addPolygons(data = dat_joined,
                 label = ~NAME,
                 popup = paste(dat_joined$NAME, "<br>", 
@@ -19,5 +20,9 @@ plot_choropleth <- function(dat_joined){
               pal = pal, 
               values = ~uhi_effect_degF, 
               title = "Deg") |>
+    addLayersControl(
+      baseGroups = c("CartoDB.Positron", "Esri.WorldImagery"),
+      # toggle for layers on the topleft
+      position = "topleft") |>
     leaflet.extras::addResetMapButton()
 }
