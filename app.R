@@ -46,9 +46,7 @@ ui <- page_sidebar(
   
   navset_card_underline(
     nav_panel("Map", leaflet::leafletOutput("map")),
-    nav_panel("Table 1", dataTableOutput("table")),
-    nav_panel("Table 2", dataTableOutput("table2")),
-    nav_panel("Table 3", dataTableOutput("table3"))
+    nav_panel("Data Table", dataTableOutput("table3"))
   )
   
 ) #page_sidebar
@@ -59,14 +57,6 @@ ui <- page_sidebar(
 # Define server 
 #----------------------------------------------------
 server <- function(input, output) {
-  
-  # base map
-  # output$map <- renderLeaflet({
-  #   leaflet() |>
-  #     addTiles() 
-  #   
-  # })
-  
   
   observe({
     
@@ -79,25 +69,16 @@ server <- function(input, output) {
     # join UHI and census data
     uhi_census_joined <- inner_join(census_tracts, uhi_city, by = "GEOID")
     
-    # Datatable to display
-    output$table <- DT::renderDataTable({
-      datatable(uhi_city)
-    })
+    # # Datatable to display
+    # output$table <- DT::renderDataTable({
+    #   datatable(uhi_city)
+    # })
     
-    # Datatable to display
-    output$table2 <- DT::renderDataTable({
-      datatable(city_census_tracts)
-    })
     
     # Datatable to display
     output$table3 <- DT::renderDataTable({
-      datatable(uhi_census_joined)
+      uhi_census_joined |> sf::st_drop_geometry()  |> select(GEOID, NAME, value, city, uhi_effect_degF) |> datatable()
     })
-    
-    # update map
-    #leafletProxy("map") |>
-    #  clearShapes() |>
-    #  addPolygons(data = city_census_tracts, color = "black", weight = 1, fill = FALSE)
     
     output$map <- renderLeaflet({
       plot_choropleth(uhi_census_joined)
