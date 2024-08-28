@@ -29,6 +29,7 @@ uhi <- readxl::read_xlsx('./data/Climate_Central_Urban_heat_islands_city_ranking
   rename(uhi_effect_degF = urban_heat_island_effect_temperature_in_degrees_f,
          uhi_effect_degC = urban_heat_island_effect_temperature_in_degrees_c)
 
+census_tracts <- readRDS("./data/all_tracts.rds")
 
 
 #----------------------------------------------------
@@ -73,10 +74,10 @@ server <- function(input, output) {
     uhi_city <- filter_uhi_city(uhi, input$wh_city)
     
     # get census tracts data for selected city
-    city_census_tracts <- get_uhi_census_tracts(uhi_city)
+    #city_census_tracts <- get_uhi_census_tracts(uhi_city)
     
     # join UHI and census data
-    uhi_census_joined <- inner_join(city_census_tracts, uhi_city, by = "GEOID")
+    uhi_census_joined <- inner_join(census_tracts, uhi_city, by = "GEOID")
     
     # Datatable to display
     output$table <- DT::renderDataTable({
