@@ -27,7 +27,7 @@ uhi <- readxl::read_xlsx('./data/Climate_Central_Urban_heat_islands_city_ranking
   rename(uhi_effect_degF = urban_heat_island_effect_temperature_in_degrees_f,
          uhi_effect_degC = urban_heat_island_effect_temperature_in_degrees_c)
 
-census_tracts <- readRDS("./data/all_tracts.rds")
+census_tracts <- readRDS("./data/all_tracts.rds") |> sf::st_transform(4326)
 
 
 #----------------------------------------------------
