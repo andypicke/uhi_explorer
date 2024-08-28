@@ -16,5 +16,6 @@ plot_choropleth <- function(dat_joined){
     addLegend(data = dat_joined,
               pal = pal, 
               values = ~uhi_effect_degF, 
-              title = "Deg") 
+              title = "Deg") |>
+    leaflet.extras::addResetMapButton()
 }
