@@ -16,8 +16,6 @@ library(leaflet)
 library(tidyverse)
 library(janitor)
 library(readxl)
-library(tidycensus)
-options(tigris_use_cache = TRUE)
 library(DT)
 
 
@@ -46,7 +44,8 @@ ui <- page_sidebar(
   
   navset_card_underline(
     nav_panel("Map", leaflet::leafletOutput("map")),
-    nav_panel("Data Table", dataTableOutput("table3"))
+    nav_panel("Data Table", dataTableOutput("table3")),
+    nav_panel("About", h3("About!"))
   )
   
 ) #page_sidebar
@@ -67,7 +66,8 @@ server <- function(input, output) {
     #city_census_tracts <- get_uhi_census_tracts(uhi_city)
     
     # join UHI and census data
-    uhi_census_joined <- inner_join(census_tracts, uhi_city, by = "GEOID")
+#    uhi_census_joined <- dplyr::inner_join(census_tracts, uhi_city, by = "GEOID")
+    uhi_census_joined <- merge(census_tracts, uhi_city, by = "GEOID") |> sf::st_as_sf()
     
     # # Datatable to display
     # output$table <- DT::renderDataTable({
@@ -77,14 +77,14 @@ server <- function(input, output) {
     
     # Datatable to display
     output$table3 <- DT::renderDataTable({
-      uhi_census_joined |> sf::st_drop_geometry()  |> select(GEOID, NAME, value, city, uhi_effect_degF) |> datatable()
+      uhi_census_joined |> sf::st_drop_geometry()  |> select(GEOID, NAME, value, city, uhi_effect_degF) |> DT::datatable()
     })
     
     output$map <- renderLeaflet({
       plot_choropleth(uhi_census_joined)
     })
     
-  }) |> bindEvent(input$wh_city)
+  }) |> bindEvent(input$wh_city, ignoreNULL = FALSE, ignoreInit = FALSE)
   
   
   
