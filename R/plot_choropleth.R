@@ -9,6 +9,8 @@ plot_choropleth <- function(dat_joined){
     addTiles() |>
     addPolygons(data = dat_joined,
                 label = ~NAME,
+                popup = paste(dat_joined$NAME, "<br>", 
+                              "UHI Effect:", dat_joined$uhi_effect_degF, " deg F"),
                 color = "black",
                 weight = 0.75,
                 fillColor = ~pal(uhi_effect_degF), 
