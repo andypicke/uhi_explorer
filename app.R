@@ -13,11 +13,12 @@
 library(shiny)
 library(bslib)
 library(leaflet)
+library(leaflet.extras)
 library(tidyverse)
 library(janitor)
 library(readxl)
 library(DT)
-library(leaflet.extras)
+
 
 # load UHI data
 uhi <- readxl::read_xlsx('./data/Climate_Central_Urban_heat_islands_city_rankings___UHI_by_census_tract.xlsx', 
@@ -44,8 +45,17 @@ ui <- page_sidebar(
   
   navset_card_underline(
     nav_panel("Map", leaflet::leafletOutput("map")),
+    nav_panel("Population Chart", plotOutput("pop_chart")),
     nav_panel("Data Table", dataTableOutput("table3")),
-    nav_panel("About", h3("About!"))
+    nav_panel("About", 
+              h4("This Shiny App Displays the estimated Urban Heat Index (UHI) Effect for Major US Cities",),
+              h5("Displays daily data from the ",
+                 a(href = "https://www.climatecentral.org/", "Climate Central"), 
+                 "analysis"),
+              h5("View the Source code on Github")
+    ),
+    
+    full_screen = TRUE
   )
   
 ) #page_sidebar
@@ -80,6 +90,11 @@ server <- function(input, output) {
     # choropleth map of UHI effect
     output$map <- renderLeaflet({
       plot_choropleth(uhi_census_joined)
+    })
+    
+    # bar chart of population 
+    output$pop_chart <- renderPlot({
+      plot_population_bins(uhi_census_joined)
     })
     
   }) |> bindEvent(input$wh_city, ignoreNULL = FALSE, ignoreInit = FALSE)
