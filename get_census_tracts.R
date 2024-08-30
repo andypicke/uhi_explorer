@@ -6,6 +6,10 @@
 #
 #---------------------------------------------
 
+library(tidycensus)
+library(readxl)
+library(janitor)
+library(tidyverse)
 
 
 # load UHI data
