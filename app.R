@@ -12,12 +12,12 @@
 
 library(shiny)
 library(bslib)
-library(leaflet)
-library(leaflet.extras)
 library(tidyverse)
-library(janitor)
-library(readxl)
-library(DT)
+library(janitor) # data cleaning
+library(readxl) # read xlxs data
+library(leaflet) # mapping
+library(leaflet.extras) # mapping
+library(DT) # nice data table
 
 
 # load UHI data
@@ -28,7 +28,10 @@ uhi <- readxl::read_xlsx('./data/Climate_Central_Urban_heat_islands_city_ranking
   rename(uhi_effect_degF = urban_heat_island_effect_temperature_in_degrees_f,
          uhi_effect_degC = urban_heat_island_effect_temperature_in_degrees_c)
 
-census_tracts <- readRDS("./data/all_tracts.rds") |> sf::st_transform(4326)
+# census tracts and population data pre-saved (see get_census_tracts.R)
+census_tracts <- readRDS("./data/all_tracts.rds") |> 
+  rename(pop = value) |>
+  sf::st_transform(4326)
 
 
 #----------------------------------------------------
@@ -84,7 +87,11 @@ server <- function(input, output) {
     
     # Datatable to display
     output$table3 <- DT::renderDataTable({
-      uhi_census_joined |> sf::st_drop_geometry()  |> select(GEOID, NAME, value, city, uhi_effect_degF) |> DT::datatable()
+      uhi_census_joined |> 
+        sf::st_drop_geometry()  |> 
+        select(NAME, pop, city, uhi_effect_degF) |>
+        rename(Population = pop) |>
+        DT::datatable()
     })
     
     # choropleth map of UHI effect
