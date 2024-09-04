@@ -1,5 +1,10 @@
-# Plot choropleth of UHI data
-
+#' Plot leaflet choropleth of UHI data for shiny app
+#'
+#' @param dat_joined Data frame of data to plot
+#'
+#' @return Leaflet map 
+#' @export
+#'
 plot_choropleth <- function(dat_joined){
   
   # make color palette for choropleth

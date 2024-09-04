@@ -1,5 +1,10 @@
-
-
+#' Make bar chart of population in UHI bins
+#'
+#' @param dat_joined Data frame with UHI and population data for census tracts
+#'
+#' @return g : ggplot bar chart
+#' @export
+#'
 plot_population_bins <- function(dat_joined){
   
   # bin the UHI effect values in 1 deg bins
