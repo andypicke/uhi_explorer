@@ -5,8 +5,8 @@ plot_population_bins <- function(dat_joined){
   # bin the UHI effect values in 1 deg bins
   dat_joined <- dat_joined |> mutate(bin = ggplot2::cut_width(uhi_effect_degF, width = 1,center = 0.5))
 
-    g <- x |> 
-    group_by(dat_joined) |>
+    g <- dat_joined |> 
+    group_by(bin) |>
     summarise(tot_pop = sum(value)) |>
     ggplot(aes(bin, tot_pop)) +
     geom_col(fill = "orange", color = "black") +
