@@ -40,7 +40,7 @@ ui <- page_sidebar(
   theme = bs_theme(bootswatch = "simplex"),
   
   sidebar = bslib::sidebar(
-    selectInput(inputId = "wh_city", label = "City", choices = unique(uhi$city), selected = "Denver")
+    selectInput(inputId = "wh_city", label = "Select City", choices = unique(uhi$city), selected = "Denver")
   ),
   
   navset_card_underline(
@@ -49,10 +49,10 @@ ui <- page_sidebar(
     nav_panel("Data Table", dataTableOutput("table3")),
     nav_panel("About", 
               h4("This Shiny App Displays the estimated Urban Heat Index (UHI) Effect for Major US Cities",),
-              h5("Displays daily data from the ",
-                 a(href = "https://www.climatecentral.org/", "Climate Central"), 
-                 "analysis"),
-              h5("View the Source code on Github")
+              h5("UHI Effect Data are from a"),
+              a(href = "https://www.climatecentral.org/climate-matters/urban-heat-islands-2023", "Climate Central Analysis"),
+              h5("Census Tracts and Population data are from the 2020 Decennial Census, obtained with the Tidycensus R package"),
+              h5("View the Source code on Github:", a(href = "https://github.com/andypicke/uhi_explorer", "Github Repo" ) )
     ),
     
     full_screen = TRUE
