@@ -11,6 +11,7 @@ plot_choropleth <- function(dat_joined){
   pal <- colorNumeric("YlOrRd", domain = dat_joined$uhi_effect_degF)
   
   leaflet() |>
+    addProviderTiles(providers$Stadia.AlidadeSmooth, group = "Stadia.AlidadeSmooth") |> 
     addProviderTiles(providers$CartoDB.Positron, group = "CartoDB.Positron") |> 
     addProviderTiles(providers$Esri.WorldImagery, group = "Esri.WorldImagery") |> 
     addPolygons(data = dat_joined,
@@ -26,7 +27,7 @@ plot_choropleth <- function(dat_joined){
               values = ~uhi_effect_degF, 
               title = "Deg F") |>
     addLayersControl(
-      baseGroups = c("CartoDB.Positron", "Esri.WorldImagery"),
+      baseGroups = c("Stadia.AlidadeSmooth","CartoDB.Positron", "Esri.WorldImagery"),
       # toggle for layers on the topleft
       position = "topleft") |>
     leaflet.extras::addResetMapButton()
