@@ -18,7 +18,7 @@ plot_population_bins <- function(dat_joined){
     scale_y_continuous(labels = scales::comma) +
     labs(x = "Urban Heat Island Effect [deg F]",
          y = "Population",
-         caption = "Data from Climate Central")+ #,
+         caption = "UHI Data from Climate Central; Population data from 2020 decennial census")+ #,
          #title = "Urban Heat Island Effect by Population") +
     theme_minimal(base_size = 14)
   
